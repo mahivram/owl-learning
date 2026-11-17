@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Event Propagation</title>
+        <style>
+            body { font-family: sans-serif; line-height: 1.6; max-width: 820px; margin: 32px auto; padding: 0 16px; color: #242424; }
+            code { background: #f1f1f1; padding: 2px 5px; border-radius: 4px; }
+            .stage { border: 2px solid #714b67; border-radius: 8px; padding: 16px; background: #f8f4f7; }
+            .middle { border: 2px solid #bd8cac; border-radius: 8px; padding: 16px; background: white; }
+            button { padding: 8px 12px; cursor: pointer; }
+            .controls { margin: 16px 0; }
+            .log { min-height: 100px; padding: 12px 12px 12px 36px; background: #f3f3f3; border-radius: 8px; }
+            .log li { margin: 4px 0; }
+            .note { border-left: 4px solid #714b67; padding: 8px 12px; background: #f8f4f7; }
+        </style>
+    </head>
+    <body>
+        <p><a href="../../index.html">Back to topics</a></p>
+        <h1>What does <code>ev.stopPropagation()</code> do?</h1>
+        <p>
+            A click is an event. When you click a nested element, the browser can deliver
+            that event to the element and its ancestors. This journey is called
+            <strong>event propagation</strong>.
+        </p>
+
+        <h2>Try it</h2>
+        <p>Click the button inside the boxes, then compare the event log with the checkbox on and off.</p>
+        <div class="controls">
+            <label>
+                <input id="stop-at-middle" type="checkbox">
+                Call <code>stopPropagation()</code> in the middle box
+            </label>
+        </div>
+        <div class="stage" id="outer">
+            Outer box
+            <div class="middle" id="middle">
+                Middle box
+                <p><button id="inner">Click me (inner button)</button></p>
+            </div>
+        </div>
+        <h3>Event log</h3>
+        <ol class="log" id="event-log" aria-live="polite">
+            <li>Click the inner button to see the event travel.</li>
+        </ol>
+        <button id="clear-log" type="button">Clear log</button>
+
+        <h2>What to notice</h2>
+        <ul>
+            <li><strong>Capture:</strong> the event travels from outer ancestors toward the clicked element.</li>
+            <li><strong>Target:</strong> the event reaches the element that was clicked.</li>
+            <li><strong>Bubbling:</strong> after the target, the event travels back up through ancestors. Click events bubble by default.</li>
+            <li><code>event.target</code> is the original clicked element; <code>event.currentTarget</code> is the element whose listener is running now.</li>
+        </ul>
+        <p class="note">
+            Calling <code>ev.stopPropagation()</code> stops the event from continuing to
+            other elements in its path. It does not undo listeners that already ran, and
+            it does not stop other listeners on the same element. It also does not cancel
+            a browser action; <code>ev.preventDefault()</code> is for that.
+        </p>
+        <p>In OWL, an event handler receives the event as <code>ev</code>, so you can call <code>ev.stopPropagation()</code> there too.</p>
+        <div class="parent">
+            <div class="child">
+                <button class="button">Click Me</button>
+            </div>
+        </div>
+        <script src="./app.js"></script>
+    </body>
+</html>
