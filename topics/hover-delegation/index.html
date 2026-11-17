@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+    <head>
+        <title>OWL hover delegation demo</title>
+        <style>
+            body { font-family: sans-serif; margin: 16px; }
+            .toolbar button { margin-right: 8px; padding: 6px 12px; }
+            .toolbar button.active { background: #714b67; color: white; }
+            .stats { margin: 12px 0; padding: 8px; background: #f3f3f3; font-family: monospace; }
+            .grid { display: grid; gap: 1px; background: #ccc; width: max-content; }
+            .label, .head { background: #eee; padding: 0 6px; font-size: 11px; display: flex; align-items: center; }
+            .head { justify-content: center; padding: 0; }
+            .label.hot, .head.hot { background: #714b67; color: white; }
+            .cell { width: 18px; height: 18px; background: white; }
+            /* Purely visual hover needs NO JavaScript at all */
+            .cell:hover { background: #d8c9d4; }
+        </style>
+    </head>
+    <body>
+        <script>
+            // Spy BEFORE OWL loads: remember every element inside the grid that got
+            // a real mouse/pointer listener. Only for learning purposes.
+            const hoverListeners = [];
+            const origAdd = EventTarget.prototype.addEventListener;
+            EventTarget.prototype.addEventListener = function (type, fn, opts) {
+                if (/^(mouse|pointer)/.test(type) && this instanceof Element) hoverListeners.push(this);
+                return origAdd.call(this, type, fn, opts);
+            };
+            window.countGridHoverListeners = () =>
+                hoverListeners.filter((el) => el.isConnected && el.closest(".grid")).length;
+        </script>
+        <p><a href="../../index.html">Back to topics</a></p>
+        <script src="../../lib/owl.iife.js"></script>
+        <script type="module" src="./app.js"></script>
+    </body>
+</html>
